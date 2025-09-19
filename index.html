@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Controle - CMM</title>
+    <title>Dashboard Público - CMM</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <style>
@@ -25,25 +25,20 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
             background-color: var(--fundo);
             color: var(--texto);
         }
-        #login-view { display: flex; justify-content: center; align-items: center; height: 100vh; }
-        #login-box { background: var(--branco); padding: 40px; border-radius: 8px; box-shadow: var(--sombra); text-align: center; width: 90%; max-width: 400px; }
-        #login-box img { max-width: 250px; margin-bottom: 20px; }
-        #login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--borda); border-radius: 6px; font-size: 1em; box-sizing: border-box; }
-        #login-button { width: 100%; padding: 12px; background-color: var(--cor-primaria); color: var(--branco); border: none; border-radius: 6px; font-size: 1.1em; cursor: pointer; }
-        #login-error { color: var(--vermelho-inativo); margin-top: 15px; min-height: 1.2em; }
-
-        #dashboard-view { display: none; flex-direction: column; height: 100vh; }
+        
+        #dashboard-view { display: flex; flex-direction: column; height: 100vh; }
         
         #app-header { display: flex; justify-content: center; align-items: center; padding: 15px 30px; background-color: var(--branco); border-bottom: 1px solid var(--borda); flex-shrink: 0; position: relative; }
         #header-buttons { position: absolute; left: 30px; display: flex; align-items: center; gap: 10px; }
-        #app-header h1 { font-size: 2em; color: var(--marrom-logo); margin: 0; }
+        #app-header h1 { font-size: 2em; color: var(--marrom-logo); margin: 0; text-align: center;}
         #app-header-logo { position: absolute; right: 30px; top: 50%; transform: translateY(-50%); }
         #app-header-logo img { height: 50px; max-width: 250px; display: block; }
-        .header-btn { padding: 8px 15px; font-size: 1em; background-color: var(--cor-secundaria); color: var(--branco); border: none; border-radius: 6px; cursor: pointer; transition: background-color 0.2s; }
-        .header-btn:hover { opacity: 0.9; }
         
         #app-container { display: flex; flex-grow: 1; overflow: hidden; }
         #sidebar { width: 300px; background-color: var(--branco); border-right: 1px solid var(--borda); padding: 20px; overflow-y: auto; flex-shrink: 0; }
@@ -155,8 +150,6 @@
             flex-direction: column; 
             justify-content: space-between; 
             font-size: 0.75em; 
-            cursor: pointer; 
-            transition: background-color 0.2s; 
             position: relative; 
         }
         .calendar-day:hover { background-color: #e9ecef; }
@@ -168,7 +161,7 @@
             color: var(--cor-primaria); 
             text-align: center; 
         }
-        .note-indicator { position: absolute; top: 5px; right: 5px; }
+        .note-indicator { position: absolute; top: 5px; right: 5px; width: 8px; height: 8px; background-color: var(--cor-primaria); border-radius: 50%; cursor: help; }
         .link-indicators-container {
             position: absolute;
             top: 5px;
@@ -180,43 +173,19 @@
             color: var(--cor-secundaria); 
             text-decoration: none; 
             font-size: 1.1em;
+            cursor: pointer;
         }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        .modal-overlay.visible { display: flex; }
-        .modal-content { background-color: var(--branco); padding: 30px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: center; width: 90%; max-width: 400px; }
-        #modal-title { margin-top: 0; }
-        #modal-input { width: 100%; padding: 10px; font-size: 1.2em; margin: 20px 0; box-sizing: border-box; text-align: center; }
-        #modal-observation { width: 100%; height: 80px; padding: 10px; font-size: 1em; margin-bottom: 20px; box-sizing: border-box; resize: vertical; }
-        .modal-actions button { padding: 10px 20px; border: none; border-radius: 6px; font-size: 1em; cursor: pointer; margin: 0 10px; }
-        #modal-save-btn { background-color: var(--cor-primaria); color: var(--branco); }
-        #modal-cancel-btn { background-color: var(--cor-secundaria); color: var(--branco); }
-
         #goal-container { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--borda); }
-        #goal-input-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px; }
-        #monthly-goal-input { width: 80px; padding: 5px; text-align: center; font-size: 1.1em; }
         #goal-progress-container { background-color: var(--borda); border-radius: 10px; overflow: hidden; }
         #goal-progress-bar { height: 20px; background-color: var(--level-4-color); width: 0%; transition: width 0.5s; }
         #goal-progress-text { text-align: center; margin-top: 5px; font-weight: 500; }
     </style>
 </head>
 <body>
-    <div id="login-view">
-        <div id="login-box">
-            <img src="./Logo CMM Horizontal.png" alt="Logo Câmara Municipal de Marabá">
-            <input type="email" id="email-input" placeholder="Email">
-            <input type="password" id="password-input" placeholder="Senha">
-            <button id="login-button">Entrar</button>
-            <p id="login-error"></p>
-        </div>
-    </div>
-
     <div id="dashboard-view">
         <header id="app-header">
             <div id="header-buttons">
-                <button id="print-button" class="header-btn" title="Imprimir Relatório">🖨️ Imprimir</button>
-                <button id="export-csv-button" class="header-btn" title="Exportar para CSV">📄 Exportar</button>
-                <button id="logout-button" class="header-btn" title="Terminar Sessão">🔒 Sair</button>
             </div>
             <h1>CÂMARA MUNICIPAL DE MARABÁ</h1>
             <a id="app-header-logo" href="#" target="_blank" rel="noopener noreferrer">
@@ -269,10 +238,6 @@
                                 <p id="pizza-total">Total de Matérias: <strong>0</strong></p>
                             </div>
                              <div id="goal-container">
-                                 <div id="goal-input-container">
-                                    <label for="monthly-goal-input">Meta do Mês:</label>
-                                    <input type="number" id="monthly-goal-input" min="0">
-                                </div>
                                   <div id="goal-progress-container">
                                        <div id="goal-progress-bar"></div>
                                   </div>
@@ -327,26 +292,12 @@
         </div>
     </div>
 
-    <div id="entry-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 id="modal-title">Lançar Matéria</h3>
-            <p id="modal-date"></p>
-            <input type="number" id="modal-input" placeholder="0" min="0">
-            <textarea id="modal-observation" placeholder="Adicionar observações ou links..."></textarea>
-            <div class="modal-actions">
-                <button id="modal-save-btn">Salvar</button>
-                <button id="modal-cancel-btn">Cancelar</button>
-            </div>
-        </div>
-    </div>
-
 <script type="module">
 // ===================================================================================
 // IMPORTAÇÕES DO FIREBASE E CONFIGURAÇÕES
 // ===================================================================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getFirestore, collection, doc, setDoc, getDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, collection, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBOgVuFwTQgTT8UuRQL-SAFvy_SfFv5Ge0",
@@ -414,25 +365,13 @@ Chart.register(ChartDataLabels);
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app);
 
 // Elementos da UI
-const loginView = document.getElementById('login-view');
-const dashboardView = document.getElementById('dashboard-view');
-const loginButton = document.getElementById('login-button');
-const logoutButton = document.getElementById('logout-button');
-const emailInput = document.getElementById('email-input');
-const passwordInput = document.getElementById('password-input');
-const loginError = document.getElementById('login-error');
 const seletorMes = document.getElementById('seletor-mes');
 const seletorAno = document.getElementById('seletor-ano');
 const listaEntidadesEl = document.getElementById('lista-entidades');
 const entidadeNomeEl = document.getElementById('entidade-nome');
 const entidadeFotoEl = document.getElementById('entidade-foto');
-const entryModal = document.getElementById('entry-modal');
-const modalDateEl = document.getElementById('modal-date');
-const modalInputEl = document.getElementById('modal-input');
-const modalObservationEl = document.getElementById('modal-observation');
 const homeView = document.getElementById('home-view');
 const individualView = document.getElementById('individual-view');
 const homeButton = document.getElementById('home-button');
@@ -440,46 +379,18 @@ const vereadoresButton = document.getElementById('vereadores-button');
 const comissoesButton = document.getElementById('comissoes-button');
 const institucionalButton = document.getElementById('institucional-button');
 const searchBar = document.getElementById('search-bar');
-const monthlyGoalInput = document.getElementById('monthly-goal-input');
 const sidebarTitleEl = document.getElementById('sidebar-title');
 const sidebarListContainer = document.getElementById('sidebar-list-container');
 
 // Estado da Aplicação
-let currentUserRole = null;
 let dadosProducao = {};
 let metaMensal = 0;
 let activeView = 'vereadores';
 let entidadeAtivaId = null; 
 let isSidebarListVisible = false;
 let chartGeralInstance, chartAnualInstance, chartAnualGeralInstance;
-let isInitialized = false;
 const MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 
-// Lógica de autenticação
-onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        const userRoleDoc = await getDoc(doc(db, "users", user.uid));
-        currentUserRole = userRoleDoc.exists() ? userRoleDoc.data().role : 'user';
-        loginView.style.display = 'none';
-        dashboardView.style.display = 'flex';
-        initDashboard();
-    } else {
-        isInitialized = false;
-        currentUserRole = null;
-        loginView.style.display = 'flex';
-        dashboardView.style.display = 'none';
-    }
-});
-
-loginButton.addEventListener('click', () => {
-    const email = emailInput.value;
-    const password = passwordInput.value;
-    loginError.textContent = '';
-    signInWithEmailAndPassword(auth, email, password)
-        .catch(error => { loginError.textContent = 'Email ou senha inválidos.'; });
-});
-
-logoutButton.addEventListener('click', () => { signOut(auth); });
 
 function isUrl(text) {
     if (typeof text !== 'string') return false;
@@ -541,55 +452,7 @@ async function escutarMetaMensal() {
     const metaDocRef = doc(db, "metas", `${ano}-${mes}`);
     const docSnap = await getDoc(metaDocRef);
     metaMensal = docSnap.exists() ? docSnap.data().valor : 0;
-    monthlyGoalInput.value = metaMensal;
     renderizarViews();
-}
-
-async function salvarMetaMensal() {
-    const ano = seletorAno.value;
-    const mes = String(parseInt(seletorMes.value) + 1).padStart(2, '0');
-    const metaDocRef = doc(db, "metas", `${ano}-${mes}`);
-    const novoValor = parseInt(monthlyGoalInput.value) || 0;
-    await setDoc(metaDocRef, { valor: novoValor });
-    metaMensal = novoValor;
-    renderizarViews();
-}
-
-function abrirModal(dataISO) {
-    const chave = `${entidadeAtivaId}_${dataISO}`;
-    const dadosDoDia = dadosProducao[chave];
-    
-    if (currentUserRole === 'user' && dadosDoDia) {
-        alert('Acesso negado. Você não pode alterar um lançamento existente.');
-        return;
-    }
-
-    entryModal.dataset.date = dataISO;
-    const [ano, mes, dia] = dataISO.split('-');
-    modalDateEl.textContent = `${dia}/${mes}/${ano}`;
-    modalInputEl.value = dadosDoDia?.quantidade || '';
-    modalObservationEl.value = dadosDoDia?.observacao || '';
-    entryModal.classList.add('visible');
-    modalInputEl.focus();
-}
-
-function fecharModal() { entryModal.classList.remove('visible'); }
-
-async function salvarProducaoModal() {
-    const dataISO = entryModal.dataset.date;
-    const chave = `${entidadeAtivaId}_${dataISO}`;
-    const valor = modalInputEl.value;
-    const observacao = modalObservationEl.value;
-    const docRef = doc(db, "materia", chave);
-
-    if (valor && !isNaN(parseFloat(valor)) && parseFloat(valor) >= 0) {
-        await setDoc(docRef, { quantidade: parseFloat(valor), observacao: observacao });
-    } else if (valor === '' && observacao) {
-        await setDoc(docRef, { quantidade: 0, observacao: observacao });
-    } else if (valor === '' && !observacao) {
-        await deleteDoc(docRef);
-    } else { alert('Por favor, insira um número válido para a quantidade.'); }
-    fecharModal();
 }
 
 function popularSeletores() {
@@ -664,12 +527,6 @@ function renderizarCalendario() {
         content += `<span class="day-value">${valorSalvo > 0 ? valorSalvo : ''}</span>`;
         dayCell.innerHTML = content;
         
-        dayCell.addEventListener('click', (e) => {
-            if (e.target.closest('.link-indicator')) {
-                 return;
-            }
-            abrirModal(dataISO);
-        });
         if (new Date(ano, mes, dia).getDay() % 6 === 0) dayCell.classList.add('weekend');
         grid.appendChild(dayCell);
     }
@@ -726,54 +583,108 @@ function renderizarGraficoGeralPizza(totais) {
     chartGeralInstance = new Chart(ctx, { type: 'pie', data: { labels, datasets: [{ data, backgroundColor: bgColors, hoverOffset: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' }, datalabels: { formatter: (v) => v, color: '#fff', font: { weight: 'bold', size: 14 } } } } });
 }
 
-function renderizarGraficoAnualGeral(totais) {
+function renderizarGraficoAnualGeral(listaDeEntidades) {
     const ano = parseInt(seletorAno.value);
     const data = [];
+    const barColors = [];
+    const topProducerNames = [];
+
+    const colorMap = new Map();
+    const predefinedColors = ['#0d6efd', '#6f42c1', '#d63384', '#dc3545', '#fd7e14', '#ffc107', '#198754', '#20c997', '#0dcaf0', '#FF5733', '#C70039', '#900C3F', '#581845', '#4A235A', '#154360', '#117864', '#196F3D', '#7D6608', '#7E5109', '#78281F', '#4A235A'];
+    listaDeEntidades.forEach((ent, index) => {
+        colorMap.set(ent.id, predefinedColors[index % predefinedColors.length]);
+    });
+    const defaultColor = 'rgba(108, 117, 125, 0.7)';
+
     for (let mes = 0; mes < 12; mes++) {
         let totalMesGeral = 0;
-        totais.forEach(ent => {
-            for (const chave in dadosProducao) {
-                 if (chave.startsWith(`${ent.id}_${ano}-${String(mes + 1).padStart(2, '0')}`)) {
-                    totalMesGeral += (dadosProducao[chave].quantidade || 0);
+        let topProducer = { id: null, nome: 'N/A', total: 0 };
+        let isTie = false;
+
+        listaDeEntidades.forEach(ent => {
+            let totalEntidadeMes = 0;
+            const diasNoMes = new Date(ano, mes + 1, 0).getDate();
+            for (let dia = 1; dia <= diasNoMes; dia++) {
+                const chave = `${ent.id}_${ano}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+                if (dadosProducao[chave]) {
+                    totalEntidadeMes += (dadosProducao[chave].quantidade || 0);
                 }
             }
+            
+            totalMesGeral += totalEntidadeMes;
+
+            if (totalEntidadeMes > topProducer.total) {
+                topProducer = { id: ent.id, nome: ent.nome, total: totalEntidadeMes };
+                isTie = false;
+            } else if (totalEntidadeMes === topProducer.total && topProducer.total > 0) {
+                isTie = true;
+                topProducer.nome = 'Empate';
+            }
         });
+        
         data.push(totalMesGeral);
+        topProducerNames.push(topProducer.nome);
+
+        if (topProducer.id && !isTie) {
+            barColors.push(colorMap.get(topProducer.id));
+        } else {
+            barColors.push(defaultColor);
+        }
     }
     const ctx = document.getElementById('graficoAnualGeral').getContext('2d');
     if (chartAnualGeralInstance) chartAnualGeralInstance.destroy();
-    chartAnualGeralInstance = new Chart(ctx, { type: 'bar', data: { labels: MESES, datasets: [{ label: `Total de Matérias em ${ano}`, data, backgroundColor: 'rgba(108, 117, 125, 0.7)' }] }, options: { responsive: true, plugins: { legend: { display: false }, datalabels: { anchor: 'end', align: 'top', formatter: (v) => v > 0 ? v : '', color: '#333' } } } });
+    chartAnualGeralInstance = new Chart(ctx, { 
+        type: 'bar', 
+        data: { 
+            labels: MESES, 
+            datasets: [{ 
+                label: `Total de Matérias em ${ano}`, 
+                data, 
+                backgroundColor: barColors 
+            }] 
+        }, 
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false,
+            plugins: { 
+                legend: { 
+                    display: false 
+                }, 
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += context.parsed.y;
+                            }
+                            return label;
+                        },
+                        afterLabel: function(context) {
+                            const topProducer = topProducerNames[context.dataIndex];
+                            if (topProducer !== 'N/A') {
+                                return `Destaque: ${topProducer}`;
+                            }
+                            return '';
+                        }
+                    }
+                },
+                datalabels: { 
+                    anchor: 'end', 
+                    align: 'top', 
+                    formatter: (value) => value > 0 ? value : '', 
+                    color: '#333',
+                    font: {
+                        weight: 'bold'
+                    }
+                } 
+            } 
+        } 
+    });
 }
 
-function exportarParaCSV() {
-    const ano = seletorAno.value;
-    const mes = parseInt(seletorMes.value);
-    const listaAtiva = activeView === 'vereadores' ? VEREADORES : COMISSOES;
-    const nomeArquivo = `relatorio_${activeView}_${MESES[mes]}_${ano}.csv`;
-    let csvContent = `data:text/csv;charset=utf-8,Data,${activeView === 'vereadores' ? 'Vereador' : 'Comissão'},Quantidade,Observação\n`;
-
-    for (const chave in dadosProducao) {
-        const [id, data] = chave.split(/_(.*)/s);
-        if (data && data.startsWith(`${ano}-${String(mes + 1).padStart(2, '0')}`)) {
-            const entidade = listaAtiva.find(c => c.id === id);
-            if (entidade) {
-                const [anoCsv, mesCsv, diaCsv] = data.split('-');
-                const dataFormatada = `${diaCsv}/${mesCsv}/${anoCsv}`;
-                const quantidade = dadosProducao[chave].quantidade || 0;
-                const observacao = dadosProducao[chave].observacao ? `"${dadosProducao[chave].observacao.replace(/"/g, '""')}"` : '';
-                csvContent += `${dataFormatada},"${entidade.nome}",${quantidade},${observacao}\n`;
-            }
-        }
-    }
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", nomeArquivo);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
 
 function renderizarCardTotais(dadosEntidade) {
     document.getElementById('total-mes').textContent = dadosEntidade.totalMensal;
@@ -794,10 +705,6 @@ function renderizarGraficoAnual(dadosEntidade) {
     const ctx = document.getElementById('graficoAnual').getContext('2d');
     if (chartAnualInstance) chartAnualInstance.destroy();
     chartAnualInstance = new Chart(ctx, { type: 'bar', data: { labels: MESES, datasets: [{ label: `Total de Matérias em ${ano}`, data, backgroundColor: 'rgba(25, 135, 84, 0.7)' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { anchor: 'end', align: 'top', formatter: (v) => v > 0 ? v : '', color: '#333' } } } });
-}
-
-function updateUIPermissions() {
-    monthlyGoalInput.disabled = (currentUserRole !== 'admin');
 }
 
 function renderizarViews() {
@@ -838,7 +745,7 @@ function renderizarViews() {
             if (entidadeAtivaId) {
                 renderizarIndividualView(totais.find(c => c.id === entidadeAtivaId));
             } else {
-                renderizarHomeView(totais);
+                renderizarHomeView(totais, VEREADORES);
             }
             break;
 
@@ -853,24 +760,24 @@ function renderizarViews() {
             if (entidadeAtivaId) {
                 renderizarIndividualView(totais.find(c => c.id === entidadeAtivaId));
             } else {
-                renderizarHomeView(totais);
+                renderizarHomeView(totais, COMISSOES);
             }
             break;
 
         case 'institucional':
             sidebarTitleEl.textContent = 'Institucional';
             totais = calcularTotais(ano, mes, INSTITUCIONAL);
+            entidadeAtivaId = INSTITUCIONAL[0].id;
             renderizarIndividualView(totais[0]);
             break;
     }
-    updateUIPermissions();
 }
 
-function renderizarHomeView(totais) {
+function renderizarHomeView(totais, listaBase) {
     homeView.style.display = 'block';
     renderizarRanking(totais);
     renderizarGraficoGeralPizza(totais);
-    renderizarGraficoAnualGeral(totais);
+    renderizarGraficoAnualGeral(listaBase);
 }
 
 function renderizarIndividualView(entidadeAtiva) {
@@ -888,12 +795,7 @@ function renderizarIndividualView(entidadeAtiva) {
     renderizarGraficoAnual(entidadeAtiva);
 }
 
-function initDashboard() {
-    if (isInitialized) {
-        renderizarViews();
-        return;
-    }
-    
+function init() {
     popularSeletores();
     
     homeButton.addEventListener('click', () => {
@@ -924,27 +826,15 @@ function initDashboard() {
     searchBar.addEventListener('input', applySearchFilter);
     seletorMes.addEventListener('change', () => { escutarMetaMensal(); });
     seletorAno.addEventListener('change', () => { escutarMetaMensal(); });
-    document.getElementById('print-button').addEventListener('click', () => {
-        if (!entidadeAtivaId) {
-            alert("Por favor, selecione um perfil para imprimir o relatório.");
-            return;
-        }
-        window.print();
-    });
-    document.getElementById('export-csv-button').addEventListener('click', exportarParaCSV);
-    document.getElementById('modal-save-btn').addEventListener('click', salvarProducaoModal);
-    document.getElementById('modal-cancel-btn').addEventListener('click', fecharModal);
-    entryModal.addEventListener('click', (e) => { if (e.target === entryModal) fecharModal(); });
-    monthlyGoalInput.addEventListener('change', salvarMetaMensal);
-
+   
     escutarMudancasNosDados();
     escutarMetaMensal();
     
     renderizarViews();
-
-    isInitialized = true;
 }
+init();
 
 </script>
 </body>
 </html>
+
